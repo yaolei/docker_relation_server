@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:14
+    image: postgres:14-22.04_beta
     environment:
       POSTGRES_USER: 'evan'
       POSTGRES_PASSWORD: 'evan789adm'
