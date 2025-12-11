@@ -6,30 +6,20 @@ services:
     container_name: edu-node-builder
     working_dir: /app
     volumes:
-     # 源码根目录（含 yarn.lock、.yarnrc.yml）
-      - /root/www/edu_rag_platform_ui:/app
-      # Yarn 全局缓存
-      - yarn-cache:/usr/local/share/.cache/yarn
-      # 产物输出目录
       - /root/www/docker_relation_server/nginx/dist:/app/dist
-      - /root/www/edu_rag_platform_ui/.yarn/cache:/app/.yarn/cache:rw
     environment:
       - NODE_ENV=production
       - BUILD_PRO=true
+      - BUILD_OUT_DIR=/app/dist
       - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
       - YARN_NPM_REGISTRY_SERVER=https://registry.npmmirror.com
       - YARN_HTTP_TIMEOUT=120000
     command: |
       sh -c "
-      corepack enable &&
+        corepack enable &&
         yarn set version stable &&
         yarn install --immutable &&
-        # 用 turbo 构建整个 monorepo
         yarn build:pro &&
-        # 收集产物（turbo 会把各 apps/*/dist 生成好）
-        mkdir -p /app/dist &&
-        cp -r apps/shell/dist/*          /app/dist/ &&
-        cp -r apps/edu-admin-app/dist/*  /app/dist/ &&
         echo 'turbo build finished'
       "
 
