@@ -6,8 +6,11 @@ services:
     container_name: edu-node-builder
     working_dir: /app
     volumes:
-      - .:/app
+     # 源码根目录（含 yarn.lock、.yarnrc.yml）
+      - /root/www/edu_rag_platform_ui:/app
+      # Yarn 全局缓存
       - yarn-cache:/usr/local/share/.cache/yarn
+      # 产物输出目录
       - /root/www/docker_relation_server/nginx/dist:/app/dist
     environment:
       - NODE_ENV=production
