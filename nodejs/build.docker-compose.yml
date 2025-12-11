@@ -12,6 +12,7 @@ services:
     environment:
       - NODE_ENV=production
       - BUILD_PRO=true
+      - COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
     command: |
       sh -c "
         corepack enable &&
