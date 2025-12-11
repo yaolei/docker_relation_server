@@ -12,6 +12,7 @@ services:
       - yarn-cache:/usr/local/share/.cache/yarn
       # 产物输出目录
       - /root/www/docker_relation_server/nginx/dist:/app/dist
+      - /root/www/edu_rag_platform_ui/.yarn/cache:/app/.yarn/cache:rw
     environment:
       - NODE_ENV=production
       - BUILD_PRO=true
