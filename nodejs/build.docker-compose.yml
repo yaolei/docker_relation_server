@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  node-builder:
+    image: node:20-alpine
+    container_name: edu-node-builder
+    working_dir: /app
+    volumes:
+      - .:/app
+      - yarn-cache:/usr/local/share/.cache/yarn
+      - /root/www/docker_relation_server/nginx/dist:/app/dist
+    environment:
+      - NODE_ENV=production
+      - BUILD_PRO=true
+    command: |
+      sh -c "
+        corepack enable &&
+        yarn set version stable &&
+        yarn install --immutable &&
+        yarn build:pro &&
+        cp -r dist/* /app/dist/
+      "
+
+volumes:
+  yarn-cache:
