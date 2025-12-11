@@ -16,6 +16,8 @@ services:
       - NODE_ENV=production
       - BUILD_PRO=true
       - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+      - YARN_NPM_REGISTRY_SERVER=https://registry.npmmirror.com
+      - YARN_HTTP_TIMEOUT=120000
     command: |
       sh -c "
         corepack enable &&
