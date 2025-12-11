@@ -21,14 +21,15 @@ services:
       - YARN_HTTP_TIMEOUT=120000
     command: |
       sh -c "
-        corepack enable &&
+      corepack enable &&
         yarn set version stable &&
         yarn install --immutable &&
-        yarn build:pro &&               # 这里会调到 turbo build
-        # turbo 默认把产物放在各 apps/*/dist, 需要集中拷贝
+        # 用 turbo 构建整个 monorepo
+        yarn build:pro &&
+        # 收集产物（turbo 会把各 apps/*/dist 生成好）
         mkdir -p /app/dist &&
-        cp -r apps/shell/dist/*      /app/dist/ &&
-        cp -r apps/edu-admin-app/dist/* /app/dist/ &&
+        cp -r apps/shell/dist/*          /app/dist/ &&
+        cp -r apps/edu-admin-app/dist/*  /app/dist/ &&
         echo 'turbo build finished'
       "
 
