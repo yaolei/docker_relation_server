@@ -6,6 +6,9 @@ services:
     container_name: edu-node-builder
     working_dir: /app
     volumes:
+      - /root/www/edu_rag_platform_ui:/app        
+      - /tmp/yarn:/tmp/yarn:ro                     
+      - yarn-cache:/usr/local/share/.cache/yarn
       - /root/www/docker_relation_server/nginx/dist:/app/dist
     environment:
       - NODE_ENV=production
@@ -16,8 +19,9 @@ services:
       - YARN_HTTP_TIMEOUT=120000
     command: |
       sh -c "
+        mkdir -p /usr/local/share/.corepack/yarn/4.12.0 &&
+        cp /tmp/yarn/yarn.cjs /usr/local/share/.corepack/yarn/4.12.0/yarn.js &&
         corepack enable &&
-        yarn set version stable &&
         yarn install --immutable &&
         yarn build:pro &&
         echo 'turbo build finished'
