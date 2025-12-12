@@ -3,74 +3,10 @@ version: "3.8"
 services:
   nginx:
     image: nginx:1.27-alpine
-    container_name: edu-nginx
+    container_name: assurate-nginx-solo
     ports:
       - "80:80"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./nginx/dist:/usr/share/nginx/html:ro
-    depends_on:
-      - gateway
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./dist:/usr/share/nginx/html:ro
     restart: unless-stopped
-    networks:
-      - edu-internal
-
-  gateway:
-    build: /root/www/edu_rag_platform_be/gateway   # 指向你已有 gateway 目录
-    container_name: edu-gateway
-    expose:
-      - "8000"
-    env_file:
-      - /root/www/edu_rag_platform_be/.env.production
-    working_dir: /app/gateway   # 你的 gateway 代码在子目录
-    command: uvicorn main:app --host 0.0.0.0 --port 8000
-    depends_on:
-      - edu-rag
-      - edu-shell
-      - edu-admin
-    restart: unless-stopped
-    networks:
-      - edu-internal
-
-  edu-rag:
-    build:
-      context: /root/www/edu_rag_platform_be
-      dockerfile: service_rag/Dockerfile   # 每个服务独立 Dockerfile
-    container_name: edu-rag
-    expose:
-      - "8001"
-    working_dir: /app
-    command: uvicorn service_rag.main:app --host 0.0.0.0 --port 8001
-    restart: unless-stopped
-    networks:
-      - edu-internal
-
-  edu-shell:
-    build:
-      context: /root/www/edu_rag_platform_be
-      dockerfile: service_shell/Dockerfile
-    container_name: edu-shell
-    expose:
-      - "8002"
-    working_dir: /app
-    command: uvicorn service_shell.main:app --host 0.0.0.0 --port 8002
-    restart: unless-stopped
-    networks:
-      - edu-internal
-
-  edu-admin:
-    build:
-      context: /root/www/edu_rag_platform_be
-      dockerfile: service_admin/Dockerfile
-    container_name: edu-admin
-    expose:
-      - "8003"
-    working_dir: /app
-    command: uvicorn service_admin.main:app --host 0.0.0.0 --port 8003
-    restart: unless-stopped
-    networks:
-      - edu-internal
-
-networks:
-  edu-internal:
-    driver: bridge
