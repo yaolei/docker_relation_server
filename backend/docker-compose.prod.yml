@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  gateway:
+    build: ./gateway
+    container_name: edu-gateway
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env.product
+    networks:
+      - edu-net
+
+  service_rag:
+    build: ./service_rag
+    container_name: edu-rag
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env.product
+    networks:
+      - edu-net
+
+  service_shell:
+    build: ./service_shell
+    container_name: edu-shell
+    restart: unless-stopped
+    ports:
+      - "8002:8002"
+    env_file:
+      - .env.product
+    networks:
+      - edu-net
+
+networks:
+  edu-net:
