@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - /root/www/edu_rag_platform_be/.env.product
+      - /root/www/edu_rag_platform_be/.env.production
     networks:
       - edu-net
 
@@ -17,7 +17,7 @@ services:
     ports:
       - "8001:8001"
     env_file:
-      - /root/www/edu_rag_platform_be/.env.product
+      - /root/www/edu_rag_platform_be/.env.production
     networks:
       - edu-net
 
@@ -28,7 +28,7 @@ services:
     ports:
       - "8002:8002"
     env_file:
-      - /root/www/edu_rag_platform_be/.env.product
+      - /root/www/edu_rag_platform_be/.env.production
     networks:
       - edu-net
 
