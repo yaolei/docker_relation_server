@@ -10,7 +10,7 @@ services:
     networks:
       - edu-net    
     environment:
-      - PYTHONPATH=/app
+      - PYTHONPATH=/
 
   service_rag:
     build: /root/www/edu_rag_platform_be/service_rag
@@ -23,7 +23,7 @@ services:
     networks:
       - edu-net
     environment:
-      - PYTHONPATH=/app
+      - PYTHONPATH=/
 
 networks:
   edu-net:
