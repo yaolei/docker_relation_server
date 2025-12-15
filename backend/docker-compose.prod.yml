@@ -8,7 +8,9 @@ services:
     env_file:
       - /root/www/edu_rag_platform_be/.env.production
     networks:
-      - edu-net
+      - edu-net    
+    environment:
+      - PYTHONPATH=/app
 
   service_rag:
     build: /root/www/edu_rag_platform_be/service_rag
@@ -20,6 +22,8 @@ services:
       - /root/www/edu_rag_platform_be/.env.production
     networks:
       - edu-net
+    environment:
+      - PYTHONPATH=/app
 
 networks:
   edu-net:
