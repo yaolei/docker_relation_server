@@ -21,16 +21,5 @@ services:
     networks:
       - edu-net
 
-  service_shell:
-    build: /root/www/edu_rag_platform_be/service_shell
-    container_name: edu-shell
-    restart: unless-stopped
-    ports:
-      - "8002:8002"
-    env_file:
-      - /root/www/edu_rag_platform_be/.env.production
-    networks:
-      - edu-net
-
 networks:
   edu-net:
