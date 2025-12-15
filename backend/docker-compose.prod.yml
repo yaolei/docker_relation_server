@@ -1,6 +1,8 @@
 services:
   gateway:
-    build: /root/www/edu_rag_platform_be/gateway
+    build:
+      context: /root/www/edu_rag_platform_be
+      dockerfile: gateway/Dockerfile
     container_name: edu-gateway
     restart: unless-stopped
     ports:
@@ -10,10 +12,12 @@ services:
     networks:
       - edu-net    
     environment:
-      - PYTHONPATH=/
+      - PYTHONPATH=/app
 
   service_rag:
-    build: /root/www/edu_rag_platform_be/service_rag
+    build:
+      context: /root/www/edu_rag_platform_be
+      dockerfile: service_rag/Dockerfile
     container_name: edu-rag
     restart: unless-stopped
     ports:
@@ -23,7 +27,7 @@ services:
     networks:
       - edu-net
     environment:
-      - PYTHONPATH=/
+      - PYTHONPATH=/app
 
 networks:
   edu-net:
