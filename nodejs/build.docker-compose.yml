@@ -14,7 +14,7 @@ services:
       - NODE_ENV=production
       - BUILD_PRO=true
       - BUILD_OUT_DIR=/app/dist
-      - VITE_API_URL=http://106.12.58.7:8000/api
+      - VITE_API_URL=http://106.12.58.7:8000/edu_rag
       - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
       - YARN_NPM_REGISTRY_SERVER=https://registry.npmmirror.com
       - YARN_HTTP_TIMEOUT=120000
