@@ -13,7 +13,6 @@ services:
       - edu-net    
     environment:
       - PYTHONPATH=/app
-      - DB_PASSWORD=${DB_PASSWORD}
 
   service_rag:
     build:
@@ -29,7 +28,6 @@ services:
       - edu-net
     environment:
       - PYTHONPATH=/app
-      - DB_PASSWORD=${DB_PASSWORD}
 
 networks:
   edu-net:
