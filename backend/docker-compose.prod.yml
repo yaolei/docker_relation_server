@@ -7,15 +7,13 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
+    env_file:
+      - /root/www/edu_rag_platform_be/.env.production
     networks:
       - edu-net    
     environment:
       - PYTHONPATH=/app
-      - DB_HOST=106.12.58.7
-      - DB_PORT=5432
-      - DB_USER=evan
       - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=accurate_edu
 
   service_rag:
     build:
@@ -25,15 +23,13 @@ services:
     restart: unless-stopped
     ports:
       - "8001:8001"
+    env_file:
+      - /root/www/edu_rag_platform_be/.env.production
     networks:
       - edu-net
     environment:
       - PYTHONPATH=/app
-      - DB_HOST=106.12.58.7
-      - DB_PORT=5432
-      - DB_USER=evan
       - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=accurate_edu
 
 networks:
   edu-net:
