@@ -25,6 +25,7 @@ services:
         yarn build:pro &&
         rm -rf /app/dist/* &&
         cp -r apps/shell/dist/* /app/dist/ &&
+        cp -r apps/edu-admin-app/dist /app/dist/admin &&
         echo '✅ turbo build finished '
       "
 
