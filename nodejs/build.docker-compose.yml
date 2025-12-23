@@ -22,9 +22,9 @@ services:
         cp /tmp/yarn/yarn.cjs /usr/local/share/.corepack/yarn/4.12.0/yarn.js &&
         corepack enable &&
         yarn install --immutable-cache &&
-        yarn build:pro
-        rm -rf /app/dist/*
-        cp -r apps/shell/dist/* /app/dist/
+        yarn build:pro &&
+        rm -rf /app/dist/* &&
+        cp -r apps/shell/dist/* /app/dist/ &&
         echo '✅ turbo build finished '
       "
 
