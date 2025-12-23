@@ -6,12 +6,12 @@ services:
     volumes:
       - /root/www/edu_rag_platform_ui:/app        
       - /tmp/yarn:/tmp/yarn:ro                     
-      - yarn-cache:/usr/local/share/.cache/yarn/berry
+      - yarn-cache:/usr/local/share/.cache/yarn
       - /root/www/docker_relation_server/nginx/dist:/app/dist
     environment:
       - NODE_ENV=production
       - BUILD_PRO=true
-      - BUILD_OUT_DIR=/tmp/dist
+      - BUILD_OUT_DIR=/app/dist
       - VITE_API_URL=http://106.12.58.7:8000/edu_rag/api
       - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
       - YARN_NPM_REGISTRY_SERVER=https://registry.npmmirror.com
