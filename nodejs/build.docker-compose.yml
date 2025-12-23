@@ -21,7 +21,7 @@ services:
         mkdir -p /usr/local/share/.corepack/yarn/4.12.0 &&
         cp /tmp/yarn/yarn.cjs /usr/local/share/.corepack/yarn/4.12.0/yarn.js &&
         corepack enable &&
-        yarn install --immutable &&
+        yarn install --immutable-cache  &&
         yarn build:pro &&
         echo '✅ turbo build finished '
       "
