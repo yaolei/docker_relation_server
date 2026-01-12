@@ -4,22 +4,29 @@ services:
     container_name: edu-node-builder
     working_dir: /app
     volumes:
-      - /root/www/edu_rag_platform_ui:/app        
-      - /tmp/yarn:/tmp/yarn:ro                     
-      - yarn-cache:/usr/local/share/.cache/yarn
+      - /root/www/edu_rag_platform_ui:/app
+      # 核心挂载1: 将宿主机 yarn 命令映射到容器
+      - /usr/bin/yarn:/usr/local/bin/yarn:ro
+      # 核心挂载2: 挂载一个合理的缓存目录路径 (请优先尝试路径A)
+      # 路径A: Yarn 4.x 典型缓存位置 (推荐首先尝试)
+      - /root/.cache/yarn:/usr/local/share/.cache/yarn
+      # 如果路径A在构建中未生效，可以尝试取消注释路径B
+      # 路径B: 另一个可能的缓存位置
+      # - /root/.yarn:/usr/local/share/.cache/yarn
       - /root/www/docker_relation_server/nginx/dist:/app/dist
     environment:
       - NODE_ENV=production
       - BUILD_PRO=true
       - BUILD_OUT_DIR=/app/dist
       - VITE_API_URL=http://106.12.58.7:8000/edu_rag/api
-      - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+      # 安全移除：容器内不再需要 corepack
+      # - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
       - YARN_NPM_REGISTRY_SERVER=https://registry.npmmirror.com
       - YARN_HTTP_TIMEOUT=120000
     command: |
       sh -c "
-        corepack enable &&
-        corepack prepare yarn@4.12.0 --activate &&
+        # 验证：打印出的版本应是宿主机上的 4.12.0，且无'Preparing...'提示
+        yarn --version
         yarn install --immutable &&
         yarn build:pro &&
         rm -rf /app/dist/* &&
