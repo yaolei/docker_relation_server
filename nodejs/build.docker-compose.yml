@@ -25,21 +25,17 @@ services:
       
     command: |
       sh -c "
-        # 使用 Node.js 直接执行宿主机的 yarn.js
-        YARN_JS=/usr/lib/node_modules/corepack/dist/yarn.js
-        
-        # 验证
+        # 验证环境
         echo '=== 环境验证 ==='
-        echo "使用 yarn.js 路径: $YARN_JS"
         echo 'Node 版本:'
         node --version
         echo 'Yarn 版本:'
-        node $YARN_JS --version
+        node /usr/lib/node_modules/corepack/dist/yarn.js --version
         
         # 执行构建
         echo '=== 开始构建 ==='
-        node $YARN_JS install --immutable
-        node $YARN_JS build:pro
+        node /usr/lib/node_modules/corepack/dist/yarn.js install --immutable
+        node /usr/lib/node_modules/corepack/dist/yarn.js build:pro
         
         # 复制文件
         echo '=== 复制文件 ==='
