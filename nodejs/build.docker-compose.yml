@@ -4,59 +4,53 @@ services:
     container_name: edu-node-builder
     working_dir: /app
     volumes:
-      - /root/www/edu_rag_platform_ui:/app        
-      # - /tmp/yarn:/tmp/yarn:ro                     
-      #- yarn-cache:/usr/local/share/.cache/yarn
-
-
-      # 关键挂载1：挂载整个 corepack 模块目录
+      - /root/www/edu_rag_platform_ui:/app
+        
+      # 挂载宿主机的 corepack 目录
       - /usr/lib/node_modules/corepack:/usr/lib/node_modules/corepack:ro
       
-      # 关键挂载2：挂载 yarn 和 corepack 的软链接
+      # 挂载宿主机 yarn 和 corepack 的可执行文件
       - /usr/bin/yarn:/usr/bin/yarn:ro
       - /usr/bin/corepack:/usr/bin/corepack:ro
       
-      # 关键挂载3：挂载 yarn 缓存目录
+      # 挂载 yarn 缓存目录
       - /root/.yarn:/root/.yarn:rw
       - /root/.cache/yarn:/root/.cache/yarn:rw
-
-
-
+      
       - /root/www/docker_relation_server/nginx/dist:/app/dist
+      
     environment:
+      - PATH=/usr/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      
       - NODE_ENV=production
       - BUILD_PRO=true
       - BUILD_OUT_DIR=/app/dist
       - VITE_API_URL=http://106.12.58.7:8000/edu_rag/api
-      #- COREPACK_ENABLE_DOWNLOAD_PROMPT=0
       - YARN_NPM_REGISTRY_SERVER=https://registry.npmmirror.com
       - YARN_HTTP_TIMEOUT=120000
+      
     command: |
       sh -c "
-
         # 验证环境
         echo '=== 环境验证 ==='
+        echo '当前PATH: $PATH'
         echo 'Yarn 路径:'
         which yarn
         echo 'Yarn 真实文件:'
-        readlink -f $(which yarn)
+        readlink -f $(which yarn) 2>/dev/null || echo '不是软链接'
+        echo 'Yarn 版本:'
+        yarn --version
         echo 'Corepack 路径:'
         which corepack
         
-        # 查看是否能找到 corepack.cjs
-        echo '检查 corepack.cjs 是否存在:'
-        ls -la /usr/lib/node_modules/corepack/dist/ | grep corepack.cjs
-
-        # corepack enable &&
-        # corepack prepare yarn@4.12.0 --activate &&
+        # 执行构建
+        yarn install --immutable
+        yarn build:pro
         
-        yarn install --immutable &&
-        yarn build:pro &&
-        rm -rf /app/dist/* &&
-        cp -r apps/shell/dist/* /app/dist/ &&
-        cp -r apps/edu-admin-app/dist /app/dist/admin &&
+        # 复制文件
+        rm -rf /app/dist/*
+        cp -r apps/shell/dist/* /app/dist/
+        cp -r apps/edu-admin-app/dist /app/dist/admin
+        
         echo '✅ turbo build finished '
       "
-
-volumes:
-  yarn-cache:
