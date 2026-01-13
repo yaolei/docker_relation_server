@@ -5,13 +5,9 @@ services:
     working_dir: /app
     volumes:
       - /root/www/edu_rag_platform_ui:/app
-        
-      # 挂载宿主机的 corepack 目录
-      - /usr/lib/node_modules/corepack:/usr/lib/node_modules/corepack:ro
       
-      # 挂载宿主机 yarn 和 corepack 的可执行文件
-      - /usr/bin/yarn:/usr/bin/yarn:ro
-      - /usr/bin/corepack:/usr/bin/corepack:ro
+      # 挂载 corepack 目录
+      - /usr/lib/node_modules/corepack:/usr/lib/node_modules/corepack:ro
       
       # 挂载 yarn 缓存目录
       - /root/.yarn:/root/.yarn:rw
@@ -20,8 +16,6 @@ services:
       - /root/www/docker_relation_server/nginx/dist:/app/dist
       
     environment:
-      - PATH=/usr/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      
       - NODE_ENV=production
       - BUILD_PRO=true
       - BUILD_OUT_DIR=/app/dist
@@ -31,26 +25,27 @@ services:
       
     command: |
       sh -c "
-        # 验证环境
+        # 使用 Node.js 直接执行宿主机的 yarn.js
+        YARN_JS=/usr/lib/node_modules/corepack/dist/yarn.js
+        
+        # 验证
         echo '=== 环境验证 ==='
-        echo '当前PATH: $PATH'
-        echo 'Yarn 路径:'
-        which yarn
-        echo 'Yarn 真实文件:'
-        readlink -f $(which yarn) 2>/dev/null || echo '不是软链接'
+        echo "使用 yarn.js 路径: $YARN_JS"
+        echo 'Node 版本:'
+        node --version
         echo 'Yarn 版本:'
-        yarn --version
-        echo 'Corepack 路径:'
-        which corepack
+        node $YARN_JS --version
         
         # 执行构建
-        yarn install --immutable
-        yarn build:pro
+        echo '=== 开始构建 ==='
+        node $YARN_JS install --immutable
+        node $YARN_JS build:pro
         
         # 复制文件
+        echo '=== 复制文件 ==='
         rm -rf /app/dist/*
         cp -r apps/shell/dist/* /app/dist/
         cp -r apps/edu-admin-app/dist /app/dist/admin
         
-        echo '✅ turbo build finished '
+        echo '✅ 构建完成'
       "
